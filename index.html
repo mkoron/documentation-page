@@ -4,25 +4,269 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Archivo:700|Domine|Source+Sans+Pro" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <title>Technical Documentation Page</title>
 </head>
 <body>
-    <nav id="navbar"><header></header>
+    <nav id="navbar">
+        <header>Flask Documentation</header>
         <ul>
-            <li><a href="" class="nav-link"></a></li>
-            <li><a href="" class="nav-link"></a></li>
-            <li><a href="" class="nav-link"></a></li>
-            <li><a href="" class="nav-link"></a></li>
-            <li><a href="" class="nav-link"></a></li>
+            <li><a href="#Quickstart" class="nav-link">Quickstart</a></li>
+            <li><a href="#A_Minimal_Application" class="nav-link">A Minimal Application</a></li>
+            <li><a href="#What_to_do_if_the_Server_does_not_Start" class="nav-link">What to do if the Server does not Start</a></li>
+            <li><a href="#Debug_Mode" class="nav-link">Debug Mode</a></li>
+            <li><a href="#Routing" class="nav-link">Routing</a></li>
         </ul>
     </nav>
     <main id="main-doc">
-        <section class="main-section"><header></header></section>
-        <section class="main-section"><header></header></section>
-        <section class="main-section"><header></header></section>
-        <section class="main-section"><header></header></section>
-        <section class="main-section"><header></header></section>
+        <section class="main-section" id="Quickstart">
+            <header>Quickstart</header>
+            <article>
+                <p>
+                Eager to get started? This page gives a good introduction to Flask. It assumes you already have Flask installed. If you do not, head over to the Installation section.
+                </p>
+            </article>
+        </section>
+        <section class="main-section" id="A_Minimal_Application">
+            <header>A Minimal Application</header>
+            <article>
+                <p>
+                A minimal Flask application looks something like this: 
+                </p>
+                <pre><code>
+                <span class="blueish">from</span> flask <span class="blueish">import</span> Flask
+                app = Flask(__name__)
+                
+                <span class="gray">@app</span>.route('/')
+                <span class="blueish">def</span> hello_world():
+                   <span class="blueish">return</span> <span class="greenish">'Hello, World!'</span>   
+                </code></pre>
+                <p>
+                So what did that code do?
+                </p>
+                <ol>
+                    <li>First we imported the Flask class. An instance of this class will be our WSGI application.</li>
+                    <li>Next we create an instance of this class. The first argument is the name of the application’s module or package. If you are using a single module (as in this example), you should use __name__ because depending on if it’s started as application or imported as module the name will be different ('__main__' versus the actual import name). This is needed so that Flask knows where to look for templates, static files, and so on. For more information have a look at the Flask documentation.</li>
+                    <li>We then use the route() decorator to tell Flask what URL should trigger our function.</li>
+                    <li>The function is given a name which is also used to generate URLs for that particular function, and returns the message we want to display in the user’s browser.</li>
+                </ol>
+                <p>
+                Just save it as hello.py or something similar. Make sure to not call your application flask.py because this would conflict with Flask itself.
+                </p>
+                <p>
+                To run the application you can either use the flask command or python’s -m switch with Flask. Before you can do that you need to tell your terminal the application to work with by exporting the FLASK_APP environment variable:
+                </p>
+                <pre><code>
+                $ export FLASK_APP=hello.py
+                $ flask run
+                    * Running on http://127.0.0.1:5000/
+                </code></pre>
+                <p>
+                If you are on Windows, the environment variable syntax depends on command line interpreter. On Command Prompt:
+                </p>
+                <pre><code>
+                C:\path\to\app><span class="blueish">set</span> FLASK_APP=hello.py
+                </code></pre>
+                <p>
+                And on PowerShell:
+                </p>
+                <pre><code>
+                PS C:\path\to\app> $env:FLASK_APP = "hello.py"
+                </code></pre>
+                <p>
+                Alternatively you can use python -m flask:
+                </p>
+                <pre><code>
+                $ export FLASK_APP=hello.py
+                $ python -m flask run
+                    * Running on http://127.0.0.1:5000/
+                </code></pre>
+                <p>
+                This launches a very simple builtin server, which is good enough for testing but probably not what you want to use in production. For deployment options see Deployment Options. 
+                </p>
+                <p>
+                Now head over to http://127.0.0.1:5000/, and you should see your hello world greeting.
+                </p>
+                <hr>
+                <h4>Externally Visible Server:</h4>
+                <p>
+                If you run the server you will notice that the server is only accessible from your own computer, not from any other in the network. This is the default because in debugging mode a user of the application can execute arbitrary Python code on your computer. 
+                </p>
+                <p>
+                If you have the debugger disabled or trust the users on your network, you can make the server publicly available simply by adding --host=0.0.0.0 to the command line:
+                </p>
+                <pre><code>
+                flask run --host=<span class="redish">0.0.0.0</span>
+                </code></pre>
+                <p>
+                This tells your operating system to listen on all public IPs.
+                </p>
+                <hr>
+            </article>
+        </section>
+        <section class="main-section" id="What_to_do_if_the_Server_does_not_Start">
+            <header>What to do if the Server does not Start</header>
+            <article>
+                <p>In case the python -m flask fails or flask does not exist, there are multiple reasons this might be the case. First of all you need to look at the error message</p>
+                <h3>Old Version of Flask</h3>
+                <p>Versions of Flask older than 0.11 use to have different ways to start the application. In short, the flask command did not exist, and neither did python -m flask. In that case you have two options: either upgrade to newer Flask versions or have a look at the Development Server docs to see the alternative method for running a server.</p>
+                <h3>Invalid Import Name</h3>
+                <p>The FLASK_APP environment variable is the name of the module to import at flask run. In case that module is incorrectly named you will get an import error upon start (or if debug is enabled when you navigate to the application). It will tell you what it tried to import and why it failed.</p>
+                <p>The most common reason is a typo or because you did not actually create an app object.</p>
+
+            </article>
+        </section>
+        <section class="main-section" id="Debug_Mode">
+            <header>Debug Mode</header>
+            <article>
+                <p>(Want to just log errors and stack traces? See Application Errors)</p>
+                <p>The flask script is nice to start a local development server, but you would have to restart it manually after each change to your code. That is not very nice and Flask can do better. If you enable debug support the server will reload itself on code changes, and it will also provide you with a helpful debugger if things go wrong.</p>
+                <p>To enable all development features (including debug mode) you can export the FLASK_ENV environment variable and set it to development before running the server:</p>
+                <pre><code>
+                $ export FLASK_ENV=development
+                $ flask run
+                </code></pre>
+                <p>(On Windows you need to use set instead of export.)</p>
+                <p>This does the following things:</p>
+                <ol>
+                    <li>it activates the debugger</li>
+                    <li>it activates the automatic reloader</li>
+                    <li>it enables the debug mode on the Flask application.</li>
+                </ol>
+                <p>You can also control debug mode separately from the environment by exporting FLASK_DEBUG=1.</p>
+                <p>There are more parameters that are explained in the Development Server docs.</p>
+                <hr>
+                <h4>Attention:</h4>
+                <p>Even though the interactive debugger does not work in forking environments (which makes it nearly impossible to use on production servers), it still allows the execution of arbitrary code. This makes it a major security risk and therefore it must never be used on production machines.</p>
+                <hr>
+            </article>
+        </section>
+        <section class="main-section" id="Routing">
+            <header>Routing</header>
+            <article>
+                <p>Modern web applications use meaningful URLs to help users. Users are more likely to like a page and come back if the page uses a meaningful URL they can remember and use to directly visit a page.</p>
+                <p>Use the route() decorator to bind a function to a URL.</p>
+                <pre><code>
+                <span class="gray">@app</span>.route(<span class="greenish">'/'</span>)
+                <span class="blueish">def</span> index():
+                    <span class="blueish">return</span> <span class="greenish">'Index Page'</span>
+                
+                <span class="gray">@app</span>.route(<span class="greenish">'/hello'</span>)
+                <span class="blueish">def</span> hello():
+                    <span class="blueish">return</span> <span class="greenish">'Hello, World'</span>
+                </code></pre>
+                <p>You can do more! You can make parts of the URL dynamic and attach multiple rules to a function.</p>
+                <h3>Variable Rules</h3>
+                <p>You can add variable sections to a URL by marking sections with <variable_name>. Your function then receives the <variable_name> as a keyword argument. Optionally, you can use a converter to specify the type of the argument like <converter:variable_name>.</p>
+                <pre><code>
+                <span class="gray">@app</span>.route(<span class="greenish">'/user/&#60username&#62'</span>)
+                <span class="blueish">def</span> show_user_profile(username):
+                    <span class="brownish"># show the user profile for that user</span>
+                    <span class="blueish">return</span> <span class="greenish">'User %s'</span> % username
+                
+                <span class="gray">@app</span>.route(<span class="greenish">'/post/&#60int:post_id&#62'</span>)
+                <span class="blueish">def</span> show_post(post_id):
+                    <span class="brownish"># show the post with the given id, the id is an integer</span>
+                    <span class="blueish">return</span> <span class="greenish">'Post %d'</span> % post_id
+                
+                <span class="gray">@app</span>.route(<span class="greenish">'/path/&#60path:subpath&#62'</span>)
+                <span class="blueish">def</span> show_subpath(subpath):
+                    <span class="brownish"># show the subpath after /path/</span>
+                    <span class="blueish">return</span> <span class="greenish">'Subpath %s'</span> % subpath
+                </code></pre>
+                <p>Converter types:</p>
+                <table>
+                    <tr>
+                        <th>string</th>
+                        <td>(default) accepts any text without a slash</td>
+                    </tr>
+                    <tr>
+                        <th>int</th>
+                        <td>accepts positive integers</td>
+                    </tr>
+                    <tr>
+                        <th>float</th>
+                        <td>accepts positive floating point values</td>
+                    </tr>
+                    <tr>
+                        <th>path</th>
+                        <td>like string but also accepts slashes</td>
+                    </tr>
+                    <tr>
+                        <th>uuid</th>
+                        <td>accepts UUID strings</td>
+                    </tr>
+                </table>
+                <h3>Unique URLs / Redirection Behavior</h3>
+                <p>The following two rules differ in their use of a trailing slash.</p>
+                <pre><code>
+                <span class="gray">@app</span>.route(<span class="greenish">'/projects/'</span>)
+                <span class="blueish">def</span> projects():
+                    <span class="blueish">return</span> <span class="greenish">'The project page'</span>
+                
+                <span class="gray">@app</span>.route(<span class="greenish">'/about'</span>)
+                <span class="blueish">def</span> about():
+                    <span class="blueish">return</span> <span class="greenish">'The about page'</span>
+                </code></pre>
+                <p>The canonical URL for the projects endpoint has a trailing slash. It’s similar to a folder in a file system. If you access the URL without a trailing slash, Flask redirects you to the canonical URL with the trailing slash.</p>
+                <p>The canonical URL for the about endpoint does not have a trailing slash. It’s similar to the pathname of a file. Accessing the URL with a trailing slash produces a 404 “Not Found” error. This helps keep URLs unique for these resources, which helps search engines avoid indexing the same page twice.</p>
+                <h3>URL Building</h3>
+                <p>To build a URL to a specific function, use the url_for() function. It accepts the name of the function as its first argument and any number of keyword arguments, each corresponding to a variable part of the URL rule. Unknown variable parts are appended to the URL as query parameters.</p>
+                <p>Why would you want to build URLs using the URL reversing function url_for() instead of hard-coding them into your templates?</p>
+                <ol>
+                    <li>Reversing is often more descriptive than hard-coding the URLs.</li>
+                    <li>You can change your URLs in one go instead of needing to remember to manually change hard-coded URLs.</li>
+                    <li>URL building handles escaping of special characters and Unicode data transparently.</li>
+                    <li>The generated paths are always absolute, avoiding unexpected behavior of relative paths in browsers.</li>
+                    <li>If your application is placed outside the URL root, for example, in /myapplication instead of /, url_for() properly handles that for you.</li>
+                </ol>
+                <p>For example, here we use the test_request_context() method to try out url_for(). test_request_context() tells Flask to behave as though it’s handling a request even while we use a Python shell. See Context Locals.</p>
+                <pre><code>
+                from flask import Flask, url_for
+
+                app = Flask(__name__)
+                
+                @app.route('/')
+                def index():
+                    return 'index'
+                
+                @app.route('/login')
+                def login():
+                    return 'login'
+                
+                @app.route('/user/<username>')
+                def profile(username):
+                    return '{}\'s profile'.format(username)
+                
+                with app.test_request_context():
+                    print(url_for('index'))
+                    print(url_for('login'))
+                    print(url_for('login', next='/'))
+                    print(url_for('profile', username='John Doe'))
+                
+                /
+                /login
+                /login?next=/
+                /user/John%20Doe
+                </code></pre>
+                <h3>HTTP Methods</h3>
+                <p>Web applications use different HTTP methods when accessing URLs. You should familiarize yourself with the HTTP methods as you work with Flask. By default, a route only answers to GET requests. You can use the methods argument of the route() decorator to handle different HTTP methods.</p>
+                <pre><code>
+                <span class="blueish">from</span> flask <span class="blueish">import</span> request
+
+                <span class="gray">@app</span>.route(<span class="greenish">'/login'</span>, methods=[<span class="greenish">'GET', 'POST'</span>])
+                <span class="blueish">def</span> login():
+                    <span class="blueish">if</span> request.method == <span class="greenish">'POST'</span>:
+                        <span class="blueish">return</span> do_the_login()
+                    <span class="blueish">else:</span>
+                        <span class="blueish">return</span> show_the_login_form()
+                </code></pre>
+                <p>If GET is present, Flask automatically adds support for the HEAD method and handles HEAD requests according to the HTTP RFC. Likewise, OPTIONS is automatically implemented for you.</p>
+            </article>
+        </section>
     </main>
     <script src="https://gitcdn.link/repo/freeCodeCamp/testable-projects-fcc/master/build/bundle.js"></script>
+
 </body>
 </html>
