@@ -35,12 +35,12 @@
                 A minimal Flask application looks something like this: 
                 </p>
                 <pre><code>
-                <span class="blueish">from</span> flask <span class="blueish">import</span> Flask
-                app = Flask(__name__)
-                
-                <span class="gray">@app</span>.route('/')
-                <span class="blueish">def</span> hello_world():
-                   <span class="blueish">return</span> <span class="greenish">'Hello, World!'</span>   
+<span class="blueish">from</span> flask <span class="blueish">import</span> Flask
+app = Flask(__name__)
+
+<span class="gray">@app</span>.route('/')
+<span class="blueish">def</span> hello_world():
+    <span class="blueish">return</span> <span class="greenish">'Hello, World!'</span>   
                 </code></pre>
                 <p>
                 So what did that code do?
@@ -58,29 +58,29 @@
                 To run the application you can either use the flask command or python’s -m switch with Flask. Before you can do that you need to tell your terminal the application to work with by exporting the FLASK_APP environment variable:
                 </p>
                 <pre><code>
-                $ export FLASK_APP=hello.py
-                $ flask run
-                    * Running on http://127.0.0.1:5000/
+$ export FLASK_APP=hello.py
+$ flask run
+    * Running on http://127.0.0.1:5000/
                 </code></pre>
                 <p>
                 If you are on Windows, the environment variable syntax depends on command line interpreter. On Command Prompt:
                 </p>
                 <pre><code>
-                C:\path\to\app><span class="blueish">set</span> FLASK_APP=hello.py
+C:\path\to\app><span class="blueish">set</span> FLASK_APP=hello.py
                 </code></pre>
                 <p>
                 And on PowerShell:
                 </p>
                 <pre><code>
-                PS C:\path\to\app> $env:FLASK_APP = "hello.py"
+PS C:\path\to\app> $env:FLASK_APP = "hello.py"
                 </code></pre>
                 <p>
                 Alternatively you can use python -m flask:
                 </p>
                 <pre><code>
-                $ export FLASK_APP=hello.py
-                $ python -m flask run
-                    * Running on http://127.0.0.1:5000/
+$ export FLASK_APP=hello.py
+$ python -m flask run
+    * Running on http://127.0.0.1:5000/
                 </code></pre>
                 <p>
                 This launches a very simple builtin server, which is good enough for testing but probably not what you want to use in production. For deployment options see Deployment Options. 
@@ -97,7 +97,7 @@
                 If you have the debugger disabled or trust the users on your network, you can make the server publicly available simply by adding --host=0.0.0.0 to the command line:
                 </p>
                 <pre><code>
-                flask run --host=<span class="redish">0.0.0.0</span>
+flask run --host=<span class="redish">0.0.0.0</span>
                 </code></pre>
                 <p>
                 This tells your operating system to listen on all public IPs.
@@ -124,8 +124,8 @@
                 <p>The flask script is nice to start a local development server, but you would have to restart it manually after each change to your code. That is not very nice and Flask can do better. If you enable debug support the server will reload itself on code changes, and it will also provide you with a helpful debugger if things go wrong.</p>
                 <p>To enable all development features (including debug mode) you can export the FLASK_ENV environment variable and set it to development before running the server:</p>
                 <pre><code>
-                $ export FLASK_ENV=development
-                $ flask run
+$ export FLASK_ENV=development
+$ flask run
                 </code></pre>
                 <p>(On Windows you need to use set instead of export.)</p>
                 <p>This does the following things:</p>
@@ -148,32 +148,32 @@
                 <p>Modern web applications use meaningful URLs to help users. Users are more likely to like a page and come back if the page uses a meaningful URL they can remember and use to directly visit a page.</p>
                 <p>Use the route() decorator to bind a function to a URL.</p>
                 <pre><code>
-                <span class="gray">@app</span>.route(<span class="greenish">'/'</span>)
-                <span class="blueish">def</span> index():
-                    <span class="blueish">return</span> <span class="greenish">'Index Page'</span>
-                
-                <span class="gray">@app</span>.route(<span class="greenish">'/hello'</span>)
-                <span class="blueish">def</span> hello():
-                    <span class="blueish">return</span> <span class="greenish">'Hello, World'</span>
+<span class="gray">@app</span>.route(<span class="greenish">'/'</span>)
+<span class="blueish">def</span> index():
+    <span class="blueish">return</span> <span class="greenish">'Index Page'</span>
+
+<span class="gray">@app</span>.route(<span class="greenish">'/hello'</span>)
+<span class="blueish">def</span> hello():
+    <span class="blueish">return</span> <span class="greenish">'Hello, World'</span>
                 </code></pre>
                 <p>You can do more! You can make parts of the URL dynamic and attach multiple rules to a function.</p>
                 <h3>Variable Rules</h3>
                 <p>You can add variable sections to a URL by marking sections with <variable_name>. Your function then receives the <variable_name> as a keyword argument. Optionally, you can use a converter to specify the type of the argument like <converter:variable_name>.</p>
                 <pre><code>
-                <span class="gray">@app</span>.route(<span class="greenish">'/user/&#60username&#62'</span>)
-                <span class="blueish">def</span> show_user_profile(username):
-                    <span class="brownish"># show the user profile for that user</span>
-                    <span class="blueish">return</span> <span class="greenish">'User %s'</span> % username
-                
-                <span class="gray">@app</span>.route(<span class="greenish">'/post/&#60int:post_id&#62'</span>)
-                <span class="blueish">def</span> show_post(post_id):
-                    <span class="brownish"># show the post with the given id, the id is an integer</span>
-                    <span class="blueish">return</span> <span class="greenish">'Post %d'</span> % post_id
-                
-                <span class="gray">@app</span>.route(<span class="greenish">'/path/&#60path:subpath&#62'</span>)
-                <span class="blueish">def</span> show_subpath(subpath):
-                    <span class="brownish"># show the subpath after /path/</span>
-                    <span class="blueish">return</span> <span class="greenish">'Subpath %s'</span> % subpath
+<span class="gray">@app</span>.route(<span class="greenish">'/user/&#60username&#62'</span>)
+<span class="blueish">def</span> show_user_profile(username):
+    <span class="brownish"># show the user profile for that user</span>
+    <span class="blueish">return</span> <span class="greenish">'User %s'</span> % username
+
+<span class="gray">@app</span>.route(<span class="greenish">'/post/&#60int:post_id&#62'</span>)
+<span class="blueish">def</span> show_post(post_id):
+    <span class="brownish"># show the post with the given id, the id is an integer</span>
+    <span class="blueish">return</span> <span class="greenish">'Post %d'</span> % post_id
+
+<span class="gray">@app</span>.route(<span class="greenish">'/path/&#60path:subpath&#62'</span>)
+<span class="blueish">def</span> show_subpath(subpath):
+    <span class="brownish"># show the subpath after /path/</span>
+    <span class="blueish">return</span> <span class="greenish">'Subpath %s'</span> % subpath
                 </code></pre>
                 <p>Converter types:</p>
                 <table>
@@ -201,13 +201,13 @@
                 <h3>Unique URLs / Redirection Behavior</h3>
                 <p>The following two rules differ in their use of a trailing slash.</p>
                 <pre><code>
-                <span class="gray">@app</span>.route(<span class="greenish">'/projects/'</span>)
-                <span class="blueish">def</span> projects():
-                    <span class="blueish">return</span> <span class="greenish">'The project page'</span>
-                
-                <span class="gray">@app</span>.route(<span class="greenish">'/about'</span>)
-                <span class="blueish">def</span> about():
-                    <span class="blueish">return</span> <span class="greenish">'The about page'</span>
+<span class="gray">@app</span>.route(<span class="greenish">'/projects/'</span>)
+<span class="blueish">def</span> projects():
+    <span class="blueish">return</span> <span class="greenish">'The project page'</span>
+
+<span class="gray">@app</span>.route(<span class="greenish">'/about'</span>)
+<span class="blueish">def</span> about():
+    <span class="blueish">return</span> <span class="greenish">'The about page'</span>
                 </code></pre>
                 <p>The canonical URL for the projects endpoint has a trailing slash. It’s similar to a folder in a file system. If you access the URL without a trailing slash, Flask redirects you to the canonical URL with the trailing slash.</p>
                 <p>The canonical URL for the about endpoint does not have a trailing slash. It’s similar to the pathname of a file. Accessing the URL with a trailing slash produces a 404 “Not Found” error. This helps keep URLs unique for these resources, which helps search engines avoid indexing the same page twice.</p>
@@ -223,44 +223,44 @@
                 </ol>
                 <p>For example, here we use the test_request_context() method to try out url_for(). test_request_context() tells Flask to behave as though it’s handling a request even while we use a Python shell. See Context Locals.</p>
                 <pre><code>
-                from flask import Flask, url_for
+from flask import Flask, url_for
 
-                app = Flask(__name__)
-                
-                @app.route('/')
-                def index():
-                    return 'index'
-                
-                @app.route('/login')
-                def login():
-                    return 'login'
-                
-                @app.route('/user/<username>')
-                def profile(username):
-                    return '{}\'s profile'.format(username)
-                
-                with app.test_request_context():
-                    print(url_for('index'))
-                    print(url_for('login'))
-                    print(url_for('login', next='/'))
-                    print(url_for('profile', username='John Doe'))
-                
-                /
-                /login
-                /login?next=/
-                /user/John%20Doe
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return 'index'
+
+@app.route('/login')
+def login():
+    return 'login'
+
+@app.route('/user/<username>')
+def profile(username):
+    return '{}\'s profile'.format(username)
+
+with app.test_request_context():
+    print(url_for('index'))
+    print(url_for('login'))
+    print(url_for('login', next='/'))
+    print(url_for('profile', username='John Doe'))
+
+/
+/login
+/login?next=/
+/user/John%20Doe
                 </code></pre>
                 <h3>HTTP Methods</h3>
                 <p>Web applications use different HTTP methods when accessing URLs. You should familiarize yourself with the HTTP methods as you work with Flask. By default, a route only answers to GET requests. You can use the methods argument of the route() decorator to handle different HTTP methods.</p>
                 <pre><code>
-                <span class="blueish">from</span> flask <span class="blueish">import</span> request
+<span class="blueish">from</span> flask <span class="blueish">import</span> request
 
-                <span class="gray">@app</span>.route(<span class="greenish">'/login'</span>, methods=[<span class="greenish">'GET', 'POST'</span>])
-                <span class="blueish">def</span> login():
-                    <span class="blueish">if</span> request.method == <span class="greenish">'POST'</span>:
-                        <span class="blueish">return</span> do_the_login()
-                    <span class="blueish">else:</span>
-                        <span class="blueish">return</span> show_the_login_form()
+<span class="gray">@app</span>.route(<span class="greenish">'/login'</span>, methods=[<span class="greenish">'GET', 'POST'</span>])
+<span class="blueish">def</span> login():
+    <span class="blueish">if</span> request.method == <span class="greenish">'POST'</span>:
+        <span class="blueish">return</span> do_the_login()
+    <span class="blueish">else:</span>
+        <span class="blueish">return</span> show_the_login_form()
                 </code></pre>
                 <p>If GET is present, Flask automatically adds support for the HEAD method and handles HEAD requests according to the HTTP RFC. Likewise, OPTIONS is automatically implemented for you.</p>
             </article>

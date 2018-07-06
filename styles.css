@@ -20,7 +20,7 @@ section > header, h3 {
 }
 
 h4 {
-   font-size: 2em;
+   font-size: 1.2em;
    margin: .4em 0;
    color: gray;
    font-style: italic; 
@@ -41,7 +41,7 @@ nav > header {
 }
 
 nav > ul {
-    width: 60%;
+    width: 80%;
     margin: 0 auto;
 }
 
@@ -67,6 +67,7 @@ ol {
 pre {
     font-family: 'Source Sans Pro', sans-serif;
     background: #e0ffff75;
+    overflow-x: auto;
     padding: 1em;
     font-size: 1.2em;
     margin-bottom: 1.5em;    
@@ -81,7 +82,6 @@ ul {
 ul > li a {
     display: block;
     padding: .5em .5em;
-    text-decoration: none;
 }
 
 table, tr, td {
@@ -147,6 +147,7 @@ th {
 
     nav > ul > li > a {
         padding-left: 10%;
+        text-decoration: none;
     }
 
     main {
@@ -161,6 +162,10 @@ th {
 
     section > header, h3 {
         font-size: 2.8rem;
+    }
+
+    h4 {
+        font-size: 2em;
     }
 
     pre {
